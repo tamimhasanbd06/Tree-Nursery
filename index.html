@@ -1,163 +1,215 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./assets/about.png">
+  <title>Green Haven - Choose Your Trees</title>
 
+  <!-- DaisyUI + Tailwind -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Tailwind and Daisy UI CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <style>
+    /* Flying animation */
+    #fly-to-cart {
+      transition: all 0.9s cubic-bezier(0.25, 0.8, 0.25, 1);
+      will-change: transform, opacity;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="./style.css">
+    /* Skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e5e5e5 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.6s infinite;
+    }
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
 
+    /* Sticky navbar shadow when scrolled */
+    .navbar-scrolled {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Modal entrance */
+    .modal-box {
+      transform: scale(0.92);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    dialog[open] .modal-box {
+      transform: scale(1);
+      opacity: 1;
+    }
+  </style>
 </head>
 
-<body>
+<body class="min-h-screen bg-base-200">
 
-    <main class="container mx-auto">
+<!-- Navbar -->
+<div class="navbar bg-base-100 sticky top-0 z-50 transition-all duration-300" id="navbar">
+  <div class="container mx-auto px-4">
+    <div class="flex-1">
+      <a class="text-2xl font-bold text-success">Green Haven</a>
+    </div>
+    <div class="flex-none gap-3">
+      <button class="btn btn-ghost btn-circle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+      
+      <!-- Mobile menu button -->
+      <label for="mobile-drawer" class="btn btn-ghost lg:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+        </svg>
+      </label>
+    </div>
+  </div>
+</div>
 
+<!-- Drawer for mobile -->
+<input type="checkbox" id="mobile-drawer" class="drawer-toggle" />
+<div class="drawer drawer-end">
+  <div class="drawer-content">
+    <!-- Main content -->
+    <main class="container mx-auto px-4 py-8">
 
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-10 text-success">Choose Your Perfect Tree</h1>
 
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <h2 class="text-[#4ade80] font-bold text-4xl text-center">Choose Your Trees</h2>
+        <!-- Sidebar - Categories & Filters (desktop) -->
+        <div class="lg:col-span-3 hidden lg:block">
+          <div class="card bg-base-100 shadow-xl sticky top-24">
+            <div class="card-body">
+              <h2 class="card-title justify-center mb-4">Filters</h2>
 
-        <div class="grid grid-cols-12 gap-8">
+              <button class="btn btn-primary w-full mb-4" id="all-trees-btn">All Trees</button>
 
-            <!-- Categories -->
-            <div class="bg-white card card-body shadow-2xl col-span-3">
-                <h2 class="font-bold text-2xl text-center">Categories</h2>
-                <div class="space-y-3 sticky top-8">
-                    <button class="btn btn-primary w-full" id="allTreesbtn">All Trees</button>
+              <div id="categories-list" class="space-y-2 mb-6"></div>
 
-                    <!-- Categories container -->
-                    <div id="categoriesContainer" class="space-y-3">
-                        <!-- Categories will be dynamically loaded here by JS -->
-                    </div>
+              <div class="divider">Price</div>
 
-                </div>
+              <input type="range" min="0" max="10000" value="10000" class="range range-success" id="price-range" />
+              <div class="flex justify-between text-sm mt-2">
+                <span>$0</span>
+                <span id="price-display">$10,000</span>
+              </div>
             </div>
-
-            <!-- Trees -->
-            <div class="bg-white card card-body shadow-2xl col-span-6">
-                <!-- Trees will rendered -->
-                <div id="treesContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <!-- Dynamically added here -->
-                    <!-- <div class="card bg-white shadow-sm">
-                        <figure>
-                            <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                                alt="Shoes" />
-                        </figure>
-                        <div class="card-body">
-                            <h2 class="card-title">Card Title</h2>
-                            <p class="line-clamp-2">A card component has a figure, a body part, and inside body there
-                                are title and actions lorem1500
-                                parts</p>
-                            <div class="badge badge-success badge-outline">Success</div>
-
-                            <div class="flex justify-between items-center">
-                                <h2 class="font-bold text-xl text-[#4ade80]">$5000</h2>
-                                <button class="btn btn-primary ">Buy Now</button>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-
-                <!-- loading spinner -->
-                <div id="loadingSpinner" class="h-[60vh] flex hidden justify-center items-center">
-                    <span class="loading loading-dots loading-xl"></span>
-                </div>
-
-
-            </div>
-
-            <!-- Cart -->
-            <div class="bg-white card card-body shadow-2xl col-span-3">
-                <h2 class="font-bold text-3xl mb-2">Cart</h2>
-
-                <div class="space-y-4">
-                    <div id="cartContainer" class="space-y-4">
-                        <!-- <div class="card card-body bg-slate-100">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h2>Name</h2>
-                                    <p> $2000 × 10</p>
-                                </div>
-                                <button class="btn btn-ghost">X</button>
-                            </div>
-                            <p class="text-right font-semibold text-xl">$500</p>
-                        </div> -->
-                    </div>
-
-                    <div id="emptyCartMessage" class="text-center py-4">
-                        <p>Your cart is empty</p>
-                        <p>Add trees to get started</p>
-                    </div>
-
-
-                    <!-- Total amount -->
-                    <div class="flex justify-between items-center bg-green-50 rounded-lg p-4 my-3 font-bold">
-                        <span>Total:</span>
-                        <span id="totalPrice">$0</span>
-                    </div>
-
-                </div>
-
-
-            </div>
+          </div>
         </div>
 
-
-        <!-- Product details modal -->
-        <dialog id="tree-details-modal" class="modal">
-            <div class="modal-box">
-
-                <!-- Modal Header with Close Button -->
-                <div class="flex justify-between items-start mb-4">
-                    <h3 class="font-bold text-2xl text-green-700" id="modalTitle">Tree Details</h3>
-                    <button class="btn btn-sm btn-circle btn-ghost"
-                        onclick="document.getElementById('tree-details-modal').close()">✕</button>
+        <!-- Products -->
+        <div class="lg:col-span-6">
+          <!-- Skeleton loader -->
+          <div id="skeleton-loader" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+            <!-- 6 skeleton cards -->
+            <div class="card bg-base-100 shadow-md rounded-xl overflow-hidden">
+              <div class="skeleton h-56 w-full"></div>
+              <div class="card-body p-5 space-y-3">
+                <div class="skeleton h-7 w-4/5 rounded"></div>
+                <div class="skeleton h-4 w-full rounded"></div>
+                <div class="skeleton h-4 w-5/6 rounded"></div>
+                <div class="flex justify-between pt-2">
+                  <div class="skeleton h-8 w-24 rounded"></div>
+                  <div class="skeleton h-10 w-28 rounded-full"></div>
                 </div>
-
-                <!-- Modal Content -->
-                <div class=" gap-6">
-                    <!-- Plant Image -->
-                    <img id="modalImage" src="" alt="plant" class="w-full !h-[250px] object-cover rounded-lg mb-12">
-
-                    <!-- Plant Details -->
-                    <div class="">
-                        <p class="text-sm text-gray-500 mb-2">
-                            <span class="font-bold">Category:</span>
-                            <span id="modalCategory" class="badge badge-primary"></span>
-                        </p>
-                        <p class="text-sm text-gray-600 mb-4">
-                            <span id="modalDescription"></span>
-                        </p>
-                        <div class="flex items-baseline gap-2 mb-6">
-                            <span class="text-3xl font-bold text-green-600">$<span id="modalPrice">0</span></span>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="modal-action">
-                    <form method="dialog">
-                        <!-- if there is a button in form, it will close the modal -->
-                        <button class="btn">Close</button>
-                    </form>
-                </div>
+              </div>
             </div>
-        </dialog>
+            <!-- Repeat 5 more times or generate with JS if preferred -->
+            <!-- ... -->
+          </div>
 
+          <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="lg:col-span-3">
+          <div class="card bg-base-100 shadow-xl sticky top-24">
+            <div class="card-body">
+              <h2 class="card-title text-2xl mb-4">Your Cart</h2>
+
+              <div id="cart-items" class="space-y-4 min-h-[300px]"></div>
+
+              <div id="empty-cart" class="text-center py-10 opacity-70">
+                <p class="text-lg">Your cart is empty</p>
+                <p class="text-sm mt-2">Add some beautiful trees!</p>
+              </div>
+
+              <div class="bg-success/10 rounded-xl p-4 mt-4">
+                <div class="flex justify-between text-lg font-bold">
+                  <span>Total:</span>
+                  <span id="cart-total">$0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
 
     </main>
+  </div>
 
+  <!-- Mobile sidebar content -->
+  <div class="drawer-side z-50">
+    <label for="mobile-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+    <div class="menu p-6 w-80 min-h-full bg-base-200 text-base-content">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Filters</h2>
+        <label for="mobile-drawer" class="btn btn-ghost btn-circle">✕</label>
+      </div>
 
-    <!-- JS -->
-    <script src="./script.js"></script>
+      <button class="btn btn-primary w-full mb-4" id="all-trees-mobile">All Trees</button>
 
+      <div id="categories-mobile" class="space-y-2 mb-6"></div>
+
+      <div class="divider">Price</div>
+      <input type="range" min="0" max="10000" value="10000" class="range range-success" id="price-range-mobile" />
+      <div class="flex justify-between text-sm mt-2">
+        <span>$0</span>
+        <span id="price-display-mobile">$10,000</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast toast-end z-50" id="toast-container"></div>
+
+<!-- Flying cart animation element -->
+<div id="fly-to-cart" class="fixed pointer-events-none z-[100] hidden">
+  <div class="w-12 h-12 rounded-full bg-success text-white flex items-center justify-center font-bold shadow-2xl ring-2 ring-success/40">
+    +1
+  </div>
+</div>
+
+<!-- Product Detail Modal -->
+<dialog id="product-modal" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box max-w-2xl">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="font-bold text-2xl text-success mb-4" id="modal-name">Tree Name</h3>
+    
+    <img id="modal-image" class="w-full h-64 object-cover rounded-xl mb-6" alt="Tree" />
+    
+    <div class="space-y-3">
+      <p><span class="font-semibold">Category:</span> <span id="modal-category" class="badge badge-outline badge-primary"></span></p>
+      <p id="modal-description" class="text-gray-600"></p>
+      <div class="text-3xl font-bold text-success mt-6">
+        $<span id="modal-price">0</span>
+      </div>
+    </div>
+
+    <div class="modal-action mt-8">
+      <button class="btn btn-outline" onclick="document.getElementById('product-modal').close()">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="./script.js"></script>
 </body>
-
 </html>
