@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- Tailwind and Daisy UI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+
+    <main class="container mx-auto">
+
+
+
+
+        <h2 class="text-[#4ade80] font-bold text-4xl text-center">Choose Your Trees</h2>
+
+        <div class="grid grid-cols-12 gap-8">
+
+            <!-- Categories -->
+            <div class="bg-white card card-body shadow-2xl col-span-3">
+                <h2 class="font-bold text-2xl text-center">Categories</h2>
+                <div class="space-y-3 sticky top-8">
+                    <button class="btn btn-primary w-full" id="allTreesbtn">All Trees</button>
+
+                    <!-- Categories container -->
+                    <div id="categoriesContainer" class="space-y-3">
+                        <!-- Categories will be dynamically loaded here by JS -->
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Trees -->
+            <div class="bg-white card card-body shadow-2xl col-span-6">
+                <!-- Trees will rendered -->
+                <div id="treesContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <!-- Dynamically added here -->
+                    <!-- <div class="card bg-white shadow-sm">
+                        <figure>
+                            <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                                alt="Shoes" />
+                        </figure>
+                        <div class="card-body">
+                            <h2 class="card-title">Card Title</h2>
+                            <p class="line-clamp-2">A card component has a figure, a body part, and inside body there
+                                are title and actions lorem1500
+                                parts</p>
+                            <div class="badge badge-success badge-outline">Success</div>
+
+                            <div class="flex justify-between items-center">
+                                <h2 class="font-bold text-xl text-[#4ade80]">$5000</h2>
+                                <button class="btn btn-primary ">Buy Now</button>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- loading spinner -->
+                <div id="loadingSpinner" class="h-[60vh] flex hidden justify-center items-center">
+                    <span class="loading loading-dots loading-xl"></span>
+                </div>
+
+
+            </div>
+
+            <!-- Cart -->
+            <div class="bg-white card card-body shadow-2xl col-span-3">
+                <h2 class="font-bold text-3xl mb-2">Cart</h2>
+
+                <div class="space-y-4">
+                    <div id="cartContainer" class="space-y-4">
+                        <!-- <div class="card card-body bg-slate-100">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h2>Name</h2>
+                                    <p> $2000 × 10</p>
+                                </div>
+                                <button class="btn btn-ghost">X</button>
+                            </div>
+                            <p class="text-right font-semibold text-xl">$500</p>
+                        </div> -->
+                    </div>
+
+                    <div id="emptyCartMessage" class="text-center py-4">
+                        <p>Your cart is empty</p>
+                        <p>Add trees to get started</p>
+                    </div>
+
+
+                    <!-- Total amount -->
+                    <div class="flex justify-between items-center bg-green-50 rounded-lg p-4 my-3 font-bold">
+                        <span>Total:</span>
+                        <span id="totalPrice">$0</span>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!-- Product details modal -->
+        <dialog id="tree-details-modal" class="modal">
+            <div class="modal-box">
+
+                <!-- Modal Header with Close Button -->
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="font-bold text-2xl text-green-700" id="modalTitle">Tree Details</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost"
+                        onclick="document.getElementById('tree-details-modal').close()">✕</button>
+                </div>
+
+                <!-- Modal Content -->
+                <div class=" gap-6">
+                    <!-- Plant Image -->
+                    <img id="modalImage" src="" alt="plant" class="w-full !h-[250px] object-cover rounded-lg mb-12">
+
+                    <!-- Plant Details -->
+                    <div class="">
+                        <p class="text-sm text-gray-500 mb-2">
+                            <span class="font-bold">Category:</span>
+                            <span id="modalCategory" class="badge badge-primary"></span>
+                        </p>
+                        <p class="text-sm text-gray-600 mb-4">
+                            <span id="modalDescription"></span>
+                        </p>
+                        <div class="flex items-baseline gap-2 mb-6">
+                            <span class="text-3xl font-bold text-green-600">$<span id="modalPrice">0</span></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-action">
+                    <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn">Close</button>
+                    </form>
+                </div>
+            </div>
+        </dialog>
+
+
+    </main>
+
+
+    <!-- JS -->
+    <script src="./script.js"></script>
+
+</body>
+
+</html>
